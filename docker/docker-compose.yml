@@ -1,0 +1,14 @@
+version: '3.8'
+
+services:
+
+  web_agenda:
+    build:
+      context: ../WebAgenda_API
+      args:
+        - MYSQL_DATABASE=web_agenda
+        - MYSQL_USER=web_agenda
+        - MYSQL_PASSWORD=my-secret-pw
+        - MYSQL_ROOT_PASSWORD=my-secret-pw
+    ports:
+      - "3306:3306"
