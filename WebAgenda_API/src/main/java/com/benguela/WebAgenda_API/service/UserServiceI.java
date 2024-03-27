@@ -1,10 +1,12 @@
 package com.benguela.WebAgenda_API.service;
 
-import com.benguela.WebAgenda_API.infra.exception.NotFindEmail;
+import com.benguela.WebAgenda_API.infra.exception.InvalidEmailException;
+import com.benguela.WebAgenda_API.infra.exception.InvalidPasswordException;
+import com.benguela.WebAgenda_API.infra.exception.NotFindEmailException;
 import com.benguela.WebAgenda_API.model.User;
 
 public interface UserServiceI {
-     boolean isIdentityPassword(String password, String passwordRepeated);
+     void isIdentityPassword(String password, String passwordRepeated) throws InvalidPasswordException;
 
      void validateUserDetails(User user);
 
@@ -12,6 +14,6 @@ public interface UserServiceI {
 
      User save(User user);
 
-     User validateUserRegister(User user) throws NotFindEmail;
+     User validateUserRegister(User user) throws NotFindEmailException, InvalidPasswordException, InvalidEmailException;
      public String encoderPassword(String password);
 }

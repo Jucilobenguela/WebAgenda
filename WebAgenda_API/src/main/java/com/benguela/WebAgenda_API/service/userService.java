@@ -1,6 +1,8 @@
 package com.benguela.WebAgenda_API.service;
 
-import com.benguela.WebAgenda_API.infra.exception.NotFindEmail;
+import com.benguela.WebAgenda_API.infra.exception.InvalidEmailException;
+import com.benguela.WebAgenda_API.infra.exception.InvalidPasswordException;
+import com.benguela.WebAgenda_API.infra.exception.NotFindEmailException;
 import com.benguela.WebAgenda_API.model.User;
 import com.benguela.WebAgenda_API.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,8 +18,10 @@ public class userService implements UserServiceI{
     @Autowired
     private PasswordEncoder passwordEncoder;
     @Override
-    public boolean isIdentityPassword(String password, String passwordRepeated) {
-        return password.equals(passwordRepeated);
+    public void isIdentityPassword(String password, String passwordRepeated) throws InvalidPasswordException {
+        if(!password.equals(passwordRepeated)){
+            throw new InvalidPasswordException("Password do not know");
+        }
     }
 
     @Override
@@ -36,24 +40,30 @@ public class userService implements UserServiceI{
     }
 
     @Override
-    public User validateUserRegister(User user) throws NotFindEmail {
-        if (isValidEmail(user.getEmail()) && isValidPassword(user.getPassword())) {
-            UserDetails userDataBase =  userRepository.findByEmail(user.getEmail());
+    public User validateUserRegister(User userRequest) throws NotFindEmailException, InvalidPasswordException, InvalidEmailException {
+        if (isValidEmail(userRequest.getEmail()) && isValidPassword(userRequest.getPassword())) {
+            UserDetails userDataBase =  userRepository.findByEmail(userRequest.getEmail());
             if (userDataBase != null) {
-                throw new NotFindEmail("Email already exists");
+                throw new NotFindEmailException("Email already exists");
             } else {
-                this.user = user;
-                this.user.setPassword(encoderPassword(user.getPassword()));
+                this.user = userRequest;
+                this.user.setPassword(encoderPassword(userRequest.getPassword()));
             }
         }
         return save(this.user);
     }
-
-    private boolean isValidPassword(String password) {
+    private boolean isValidEmail(String email) throws InvalidEmailException {
+        String regex = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$";
+        if (!email.matches(regex)){
+            throw new InvalidEmailException("Invalid Email");
+        }
         return true;
     }
-
-    private boolean isValidEmail(String email) {
+    private boolean isValidPassword(String password) throws InvalidPasswordException {
+        String regex = "(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%?&])[A-Za-z\\d@$!%?&]{8,}";
+        if (!password.matches(regex)){
+            throw new InvalidPasswordException("Invalid Password!");
+        }
         return true;
     }
 

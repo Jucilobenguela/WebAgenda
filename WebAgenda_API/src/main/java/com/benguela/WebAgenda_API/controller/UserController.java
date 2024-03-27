@@ -2,7 +2,9 @@ package com.benguela.WebAgenda_API.controller;
 
 import com.benguela.WebAgenda_API.dto.userDto.UserLoginDto;
 import com.benguela.WebAgenda_API.dto.userDto.UserRegisterDto;
-import com.benguela.WebAgenda_API.infra.exception.NotFindEmail;
+import com.benguela.WebAgenda_API.infra.exception.InvalidEmailException;
+import com.benguela.WebAgenda_API.infra.exception.InvalidPasswordException;
+import com.benguela.WebAgenda_API.infra.exception.NotFindEmailException;
 import com.benguela.WebAgenda_API.infra.util.Convert;
 import com.benguela.WebAgenda_API.model.User;
 import com.benguela.WebAgenda_API.service.UserServiceI;
@@ -31,21 +33,19 @@ public class UserController {
         return ResponseEntity.ok(userServiceI.authenticated(user));
     }
     @PostMapping("register")
-    public ResponseEntity<?> register(@RequestBody @Valid UserRegisterDto userRegisterDto){
-        if(userServiceI.isIdentityPassword(userRegisterDto.getPassword(),userRegisterDto.getRepeatPassword())){
-            this.user = Convert.convertUserDtoToUser(userRegisterDto);
-            User userSaved;
+    public ResponseEntity<?> register(@RequestBody @Valid UserRegisterDto userRegisterDto) {
             try {
+                userServiceI.isIdentityPassword(userRegisterDto.getPassword(),userRegisterDto.getRepeatPassword());
+                this.user = Convert.convertUserDtoToUser(userRegisterDto);
+                User userSaved;
                 userSaved = userServiceI.validateUserRegister(user);
                 URI location = ServletUriComponentsBuilder.fromCurrentRequest()
                         .path("/{id}")
                         .buildAndExpand(userSaved.getId())
                         .toUri();
                 return ResponseEntity.created(location).body(userSaved);
-            } catch (NotFindEmail e) {
+            } catch (NotFindEmailException | InvalidEmailException | InvalidPasswordException e) {
                 return ResponseEntity.badRequest().body(e.getMessage());
             }
         }
-       return ResponseEntity.badRequest().body("password do not know");
-    }
 }
