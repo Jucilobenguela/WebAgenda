@@ -12,7 +12,7 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.crypto.factory.PasswordEncoderFactories;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
@@ -44,6 +44,8 @@ public class WebSecurityConfigure {
                 .authorizeHttpRequests(authorize-> authorize
                         .requestMatchers(HttpMethod.POST, "/employee/test").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.POST,"/employee/login").permitAll()
+                        .requestMatchers(HttpMethod.POST,"/user/register").permitAll()
+                        .requestMatchers(HttpMethod.POST,"/user/login").permitAll()
                         .anyRequest().authenticated())
                 .httpBasic(Customizer.withDefaults())
                 .build();
@@ -51,8 +53,8 @@ public class WebSecurityConfigure {
 
 
     @Bean
-    public PasswordEncoder passwordEncoder() {
-        return PasswordEncoderFactories.createDelegatingPasswordEncoder();
+    public PasswordEncoder encoder() {
+        return new BCryptPasswordEncoder();
     }
 
     @Bean
