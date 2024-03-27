@@ -18,6 +18,8 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
+import java.util.HashMap;
+import java.util.Map;
 
 
 @RestController
@@ -45,7 +47,14 @@ public class UserController {
                         .toUri();
                 return ResponseEntity.created(location).body(userSaved);
             } catch (NotFindEmailException | InvalidEmailException | InvalidPasswordException e) {
-                return ResponseEntity.badRequest().body(e.getMessage());
+                return ResponseEntity.badRequest().body(error("Error", 400, e.getMessage()));
             }
+        }
+        private Map<String, Object> error(String status, int code, String message){
+            Map<String, Object> body = new HashMap<>();
+            body.put("status", status);
+            body.put("code", code);
+            body.put("message", message);
+            return body;
         }
 }
