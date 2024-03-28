@@ -4,13 +4,13 @@ import com.benguela.WebAgenda_API.infra.exception.InvalidEmailException;
 import com.benguela.WebAgenda_API.infra.exception.InvalidPasswordException;
 import com.benguela.WebAgenda_API.infra.exception.NotFindEmailException;
 import com.benguela.WebAgenda_API.model.User;
+import org.springframework.security.core.Authentication;
 
 public interface UserServiceI {
      void isIdentityPassword(String password, String passwordRepeated) throws InvalidPasswordException;
 
-     void validateUserDetails(User user);
+     User validateEmail(String email) throws NotFindEmailException;
 
-     User authenticated(User user);
 
      User save(User user);
 

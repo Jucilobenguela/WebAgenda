@@ -3,16 +3,21 @@ package com.benguela.WebAgenda_API.service;
 import com.benguela.WebAgenda_API.infra.exception.InvalidEmailException;
 import com.benguela.WebAgenda_API.infra.exception.InvalidPasswordException;
 import com.benguela.WebAgenda_API.infra.exception.NotFindEmailException;
+import com.benguela.WebAgenda_API.infra.exception.UserNotFoundException;
 import com.benguela.WebAgenda_API.model.User;
 import com.benguela.WebAgenda_API.repository.UserRepository;
+import com.benguela.WebAgenda_API.security.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
-public class userService implements UserServiceI{
+public class UserService implements UserServiceI , UserDetailsService {
     User user;
+    @Autowired
+    AuthService authService;
     @Autowired
     UserRepository userRepository;
     @Autowired
@@ -25,14 +30,14 @@ public class userService implements UserServiceI{
     }
 
     @Override
-    public void validateUserDetails(User user) {
-
+    public User validateEmail(String email) throws NotFindEmailException {
+        User user1 = (User)userRepository.findByEmail(email);
+        if (user1==null){
+            throw new NotFindEmailException("Email don´t existed");
+        }
+        return user1;
     }
 
-    @Override
-    public User authenticated(User user) {
-        return null;
-    }
 
     @Override
     public User save(User user) {
@@ -72,5 +77,15 @@ public class userService implements UserServiceI{
             throw new NullPointerException();
         }
         return passwordEncoder.encode(password);
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String username){
+        try {
+            return userRepository.findByEmail(username);
+        }catch (UserNotFoundException e){
+                throw new UserNotFoundException("User with that email not found");
+        }
+
     }
 }

@@ -2,14 +2,16 @@
 
     
 
- document.getElementById("loginButton").addEventListener("click", function(event){
-    event.preventDefault();
-    var email = document.getElementById("inputEmail").value;
-    var password = document.getElementById("inputPassword").value;
-   
-    console.log(email,password);
-    enviar(email,password);
-});
+function loginButton(){
+    document.getElementById("loginButton").addEventListener("click", function(event){
+        event.preventDefault();
+        var email = document.getElementById("inputEmail").value;
+        var password = document.getElementById("inputPassword").value;
+       
+        console.log(email,password);
+        enviar(email,password);
+    });
+}
 
 
 

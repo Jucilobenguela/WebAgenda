@@ -7,14 +7,16 @@ import com.benguela.WebAgenda_API.infra.exception.InvalidPasswordException;
 import com.benguela.WebAgenda_API.infra.exception.NotFindEmailException;
 import com.benguela.WebAgenda_API.infra.util.Convert;
 import com.benguela.WebAgenda_API.model.User;
+import com.benguela.WebAgenda_API.security.TokenService;
 import com.benguela.WebAgenda_API.service.UserServiceI;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
@@ -24,21 +26,34 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/user")
+@CrossOrigin(origins = "*"
+        , methods = {
+        RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE}
+        , allowedHeaders = {"Content-Type", "Authorization"})
 public class UserController {
-    private User user;
+    @Autowired
+    TokenService tokenService;
     @Autowired
     UserServiceI userServiceI;
+    @Autowired
+    AuthenticationManager authenticationManager;
     @PostMapping("/login")
-    public ResponseEntity<User> login(@RequestBody @Valid UserLoginDto userDto){
-         this.user = Convert.convertUserDtoToUser(userDto);
-        userServiceI.validateUserDetails(user);
-        return ResponseEntity.ok(userServiceI.authenticated(user));
+    public ResponseEntity<String> login(@RequestBody @Valid UserLoginDto loginDTO){
+        Authentication userNamePassword
+                = new UsernamePasswordAuthenticationToken(loginDTO.getEmail(),loginDTO.getPassword());
+        Authentication auth = this.authenticationManager.authenticate(userNamePassword);
+        String token = tokenService.generateToken((User) auth.getPrincipal());
+        HttpHeaders responseHeaders = new HttpHeaders();
+        responseHeaders.set("Authorization", "Bearer" + token);
+        return ResponseEntity.ok()
+                .headers(responseHeaders)
+                .body("teste");
     }
-    @PostMapping("register")
+    @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody @Valid UserRegisterDto userRegisterDto) {
             try {
                 userServiceI.isIdentityPassword(userRegisterDto.getPassword(),userRegisterDto.getRepeatPassword());
-                this.user = Convert.convertUserDtoToUser(userRegisterDto);
+                User user = Convert.convertUserDtoToUser(userRegisterDto);
                 User userSaved;
                 userSaved = userServiceI.validateUserRegister(user);
                 URI location = ServletUriComponentsBuilder.fromCurrentRequest()
