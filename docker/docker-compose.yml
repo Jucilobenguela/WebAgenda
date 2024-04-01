@@ -4,7 +4,7 @@ services:
 
   web_agenda:
     build:
-      context: ../WebAgenda_API
+      context: ../WebAgendaAPI
       args:
         - MYSQL_DATABASE=web_agenda
         - MYSQL_USER=web_agenda
