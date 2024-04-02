@@ -1,4 +1,4 @@
-package com.benguela.webAgendaAPI.service;
+package com.benguela.webAgendaAPI.service.interfac;
 
 
 import com.benguela.webAgendaAPI.exception.InvalidEmailException;

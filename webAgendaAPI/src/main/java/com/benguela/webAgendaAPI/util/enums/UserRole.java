@@ -1,4 +1,4 @@
-package com.benguela.webAgendaAPI.util;
+package com.benguela.webAgendaAPI.util.enums;
 import org.springframework.stereotype.Component;
 
 public enum UserRole {

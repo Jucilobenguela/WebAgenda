@@ -4,18 +4,16 @@ import com.benguela.webAgendaAPI.dto.userDto.UserLoginDto;
 import com.benguela.webAgendaAPI.dto.userDto.UserRegisterDto;
 import com.benguela.webAgendaAPI.exception.InvalidEmailException;
 import com.benguela.webAgendaAPI.exception.InvalidPasswordException;
-import com.benguela.webAgendaAPI.exception.NotAuthenticateException;
 import com.benguela.webAgendaAPI.exception.NotFindEmailException;
 import com.benguela.webAgendaAPI.model.User;
 import com.benguela.webAgendaAPI.segurity.AuthService;
 import com.benguela.webAgendaAPI.segurity.TokenService;
-import com.benguela.webAgendaAPI.service.UserServiceI;
-import com.benguela.webAgendaAPI.util.Convert;
+import com.benguela.webAgendaAPI.service.interfac.UserServiceI;
+import com.benguela.webAgendaAPI.util.convert.ConvertUser;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -54,9 +52,8 @@ public class UserController {
     public ResponseEntity<?> register(@RequestBody @Valid UserRegisterDto userRegisterDto) {
         try {
             userServiceI.isIdentityPassword(userRegisterDto.getPassword(),userRegisterDto.getRepeatPassword());
-            User user = Convert.convertUserDtoToUser(userRegisterDto);
-            User userSaved;
-            userSaved = userServiceI.validateUserRegister(user);
+            User user = ConvertUser.convertUserDtoToUser(userRegisterDto);
+            User userSaved = userServiceI.validateUserRegister(user);
             URI location = ServletUriComponentsBuilder.fromCurrentRequest()
                     .path("/{id}")
                     .buildAndExpand(userSaved.getId())

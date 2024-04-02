@@ -1,6 +1,6 @@
 package com.benguela.webAgendaAPI.model;
 
-import com.benguela.webAgendaAPI.util.UserRole;
+import com.benguela.webAgendaAPI.util.enums.UserRole;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;

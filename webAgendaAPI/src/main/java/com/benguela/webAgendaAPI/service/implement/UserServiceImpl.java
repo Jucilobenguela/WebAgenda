@@ -1,4 +1,4 @@
-package com.benguela.webAgendaAPI.service;
+package com.benguela.webAgendaAPI.service.implement;
 
 
 import com.benguela.webAgendaAPI.exception.InvalidEmailException;
@@ -7,13 +7,14 @@ import com.benguela.webAgendaAPI.exception.NotFindEmailException;
 import com.benguela.webAgendaAPI.model.User;
 import com.benguela.webAgendaAPI.repository.UserRepository;
 import com.benguela.webAgendaAPI.segurity.AuthService;
+import com.benguela.webAgendaAPI.service.interfac.UserServiceI;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
-public class UserService implements UserServiceI {
+public class UserServiceImpl implements UserServiceI {
     User user;
     @Autowired
     AuthService authService;

@@ -31,6 +31,7 @@ public class SecurityConfigurations {
                 .authorizeHttpRequests(authorize-> authorize
                         .requestMatchers(HttpMethod.POST,"web_agenda/user/login").permitAll()
                         .requestMatchers(HttpMethod.POST, "/web_agenda/user/register").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/web_agenda/client/schedule").permitAll()
                         .anyRequest().authenticated())
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
