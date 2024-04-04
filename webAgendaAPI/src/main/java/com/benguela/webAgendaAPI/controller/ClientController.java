@@ -6,6 +6,7 @@ import com.benguela.webAgendaAPI.exception.InvalidPhoneNumberException;
 import com.benguela.webAgendaAPI.model.Client;
 import com.benguela.webAgendaAPI.service.interfac.ClientServiceI;
 import com.benguela.webAgendaAPI.util.convert.ConvertClient;
+import com.benguela.webAgendaAPI.util.error.Err;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -35,7 +36,7 @@ public class ClientController {
                     .toUri();
             return ResponseEntity.created(location).body(clientSaved);
         } catch (InvalidPhoneNumberException | IllegalDateTimeException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
+            return ResponseEntity.badRequest().body(Err.error("Error", 400, e.getMessage()));
         }
     }
 }

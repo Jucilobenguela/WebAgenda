@@ -1,15 +1,21 @@
 package com.benguela.webAgendaAPI.controller;
 
+import com.benguela.webAgendaAPI.dto.employeeDto.EmployeeRegisterDto;
 import com.benguela.webAgendaAPI.dto.userDto.UserLoginDto;
 import com.benguela.webAgendaAPI.dto.userDto.UserRegisterDto;
+import com.benguela.webAgendaAPI.exception.ExistentEmployeeException;
 import com.benguela.webAgendaAPI.exception.InvalidEmailException;
 import com.benguela.webAgendaAPI.exception.InvalidPasswordException;
 import com.benguela.webAgendaAPI.exception.NotFindEmailException;
+import com.benguela.webAgendaAPI.model.Employee;
 import com.benguela.webAgendaAPI.model.User;
 import com.benguela.webAgendaAPI.segurity.AuthService;
 import com.benguela.webAgendaAPI.segurity.TokenService;
+import com.benguela.webAgendaAPI.service.interfac.EmployeeI;
 import com.benguela.webAgendaAPI.service.interfac.UserServiceI;
+import com.benguela.webAgendaAPI.util.convert.ConvertEmployee;
 import com.benguela.webAgendaAPI.util.convert.ConvertUser;
+import com.benguela.webAgendaAPI.util.error.Err;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -44,7 +50,7 @@ public class UserController {
             responseHeaders.set("Authorization", "Bearer" + token);
             return ResponseEntity.ok().headers(responseHeaders).body("User authenticated");
         } catch ( Exception e) {
-            return ResponseEntity.badRequest().body(error("Error", 400, e.getMessage()));
+            return ResponseEntity.badRequest().body(Err.error("Error", 400, e.getMessage()));
         }
 
     }
@@ -60,15 +66,8 @@ public class UserController {
                     .toUri();
             return ResponseEntity.created(location).body(userSaved);
         } catch (NotFindEmailException | InvalidEmailException | InvalidPasswordException e) {
-            return ResponseEntity.badRequest().body(error("Error", 400, e.getMessage()));
+            return ResponseEntity.badRequest().body(Err.error("Error", 400, e.getMessage()));
         }
-    }
-    private Map<String, Object> error(String status, int code, String message){
-        Map<String, Object> body = new HashMap<>();
-        body.put("status", status);
-        body.put("code", code);
-        body.put("message", message);
-        return body;
     }
 
 } 
