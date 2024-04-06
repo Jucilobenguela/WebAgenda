@@ -17,8 +17,6 @@ import org.springframework.stereotype.Service;
 public class UserServiceImpl implements UserServiceI {
     User user;
     @Autowired
-    AuthService authService;
-    @Autowired
     UserRepository userRepository;
     @Autowired
     private PasswordEncoder passwordEncoder;

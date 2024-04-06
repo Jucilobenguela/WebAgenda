@@ -14,7 +14,7 @@ public class EmployeeServiceImpl implements EmployeeI {
 
     @Override
     public Employee create(Employee employee) throws ExistentEmployeeException {
-        if (!isExistent(employee.getName())) {
+        if (!isExistent(employee.getUsername())) {
             return employeeRepository.save(employee);
         }
         throw new ExistentEmployeeException("The employee already exists.");
@@ -26,7 +26,7 @@ public class EmployeeServiceImpl implements EmployeeI {
         return existingEmployee != null;
     }
 
-    private Employee findEmployee(String name) throws ExistentEmployeeException {
+    private Employee findEmployeeByName(String name) throws ExistentEmployeeException {
         Employee employee = employeeRepository.findByName(name);
       if (employee == null){
           throw new ExistentEmployeeException("Employee not fond");

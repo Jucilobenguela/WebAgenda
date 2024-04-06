@@ -44,8 +44,8 @@ public class UserController {
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody @Valid UserLoginDto userLoginDto){
         try {
-            String token = tokenService.generateToken((User) authService
-                    .authenticate(userLoginDto.getEmail(), userLoginDto.getPassword()).getPrincipal());
+            User user = ((User) authService.authenticate(userLoginDto.getEmail(), userLoginDto.getPassword()).getPrincipal());
+            String token = tokenService.generateToken(user.getEmail());
             HttpHeaders responseHeaders = new HttpHeaders();
             responseHeaders.set("Authorization", "Bearer" + token);
             return ResponseEntity.ok().headers(responseHeaders).body("User authenticated");

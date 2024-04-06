@@ -21,15 +21,14 @@ public class TokenService {
     //@Value("${api.security.token.secret}")
     private String secret="secret";
 
-    public String generateToken(User user){
+    public String generateToken(String email){
         try{
             Algorithm algorithm = Algorithm.HMAC256(secret);
-            String token = JWT.create()
+            return JWT.create()
                     .withIssuer("auth-api")
-                    .withSubject(user.getEmail())
+                    .withSubject(email)
                     .withExpiresAt(genExpirationDate())
                     .sign(algorithm);
-            return token;
         } catch (JWTCreationException exception) {
             throw new RuntimeException("Error while generating token", exception);
         }

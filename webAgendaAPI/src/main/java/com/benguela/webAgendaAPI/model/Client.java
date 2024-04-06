@@ -41,21 +41,12 @@ public class Client {
     public Long getId() {
         return this.id;
     }
-    public String getClientName() {
-        return clientName;
-    }
 
-    public void setClientName(String clientName) {
-        this.clientName = clientName;
-    }
 
     public String getClientPhoneNumber() {
         return clientPhoneNumber;
     }
 
-    public void setClientPhoneNumber(String clientPhoneNumber) {
-        this.clientPhoneNumber = clientPhoneNumber;
-    }
 
     public Date getDateTime() {
         return dateTime;

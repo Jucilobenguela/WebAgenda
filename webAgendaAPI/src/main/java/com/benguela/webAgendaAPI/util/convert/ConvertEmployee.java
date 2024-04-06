@@ -1,5 +1,6 @@
 package com.benguela.webAgendaAPI.util.convert;
 
+import com.benguela.webAgendaAPI.dto.employeeDto.EmployeeLoginDto;
 import com.benguela.webAgendaAPI.dto.employeeDto.EmployeeRegisterDto;
 import com.benguela.webAgendaAPI.model.Employee;
 
