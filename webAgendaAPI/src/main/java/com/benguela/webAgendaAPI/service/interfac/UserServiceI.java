@@ -6,7 +6,7 @@ import com.benguela.webAgendaAPI.exception.InvalidPasswordException;
 import com.benguela.webAgendaAPI.exception.NotFindEmailException;
 import com.benguela.webAgendaAPI.model.User;
 
-public interface UserServiceI {
+public interface UserServiceI  {
      void isIdentityPassword(String password, String passwordRepeated) throws InvalidPasswordException;
 
      User validateEmail(String email) throws NotFindEmailException;

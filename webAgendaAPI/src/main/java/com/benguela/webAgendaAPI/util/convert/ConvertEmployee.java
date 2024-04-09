@@ -6,6 +6,9 @@ import com.benguela.webAgendaAPI.model.Employee;
 
 public class ConvertEmployee {
     public static Employee ConvertEmployeeDtoToEmployee(EmployeeRegisterDto employeeRegisterDto) {
-        return new Employee(employeeRegisterDto.getName(), employeeRegisterDto.getPassword());
+        return new Employee(employeeRegisterDto.getEmployeeName(), employeeRegisterDto.getPassword());
+    }
+    public static Employee ConvertEmployeeDtoToEmployee(EmployeeLoginDto employeeLoginDto) {
+        return new Employee(employeeLoginDto.getEmployeeName(), employeeLoginDto.getPassword());
     }
 }

@@ -33,7 +33,6 @@ public class SecurityConfigurations {
                         .requestMatchers(HttpMethod.POST, "/web_agenda/user/register").permitAll()
                         .requestMatchers(HttpMethod.POST, "/web_agenda/client/schedule").permitAll()
                         .requestMatchers(HttpMethod.POST, "/web_agenda/employee/login").permitAll()
-                        .requestMatchers(HttpMethod.POST,"/web_agenda/employee/create").authenticated()
                         .anyRequest().authenticated())
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();

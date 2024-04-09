@@ -4,23 +4,15 @@ import jakarta.validation.constraints.NotBlank;
 
 public class EmployeeLoginDto {
     @NotBlank
-    private String name;
+    private String employeeName;
     @NotBlank
     private String password;
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
+    public String getEmployeeName() {
+        return employeeName;
     }
 
     public String getPassword() {
         return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
     }
 }

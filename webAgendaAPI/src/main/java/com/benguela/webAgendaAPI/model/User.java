@@ -1,6 +1,6 @@
 package com.benguela.webAgendaAPI.model;
 
-import com.benguela.webAgendaAPI.util.enums.UserRole;
+import com.benguela.webAgendaAPI.util.enums.RoleEnum;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -20,7 +20,7 @@ public class User implements UserDetails {
     private String username;
     private String email;
     private String password;
-    private UserRole roles;
+    private RoleEnum roles;
 
     public User(String email, String password) {
         this.email = email;
@@ -41,7 +41,7 @@ public class User implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        if(roles == UserRole.ADMIN){
+        if(roles == RoleEnum.ADMIN){
             return List.of(new SimpleGrantedAuthority("ROLE_ADMIN"),
                     new SimpleGrantedAuthority("ROLE_USER"));
         }

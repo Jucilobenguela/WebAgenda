@@ -2,9 +2,8 @@ package com.benguela.webAgendaAPI.controller;
 
 import com.benguela.webAgendaAPI.dto.employeeDto.EmployeeLoginDto;
 import com.benguela.webAgendaAPI.dto.employeeDto.EmployeeRegisterDto;
-import com.benguela.webAgendaAPI.exception.ExistentEmployeeException;
 import com.benguela.webAgendaAPI.model.Employee;
-import com.benguela.webAgendaAPI.model.User;
+import com.benguela.webAgendaAPI.repository.EmployeeRepository;
 import com.benguela.webAgendaAPI.segurity.AuthService;
 import com.benguela.webAgendaAPI.segurity.TokenService;
 import com.benguela.webAgendaAPI.service.interfac.EmployeeI;
@@ -14,10 +13,13 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
+
+
 
 @RestController
 @RequestMapping("web_agenda/employee")
@@ -26,6 +28,10 @@ public class EmployeeController {
     EmployeeI employeeI;
     @Autowired
     TokenService tokenService;
+    @Autowired
+    AuthenticationManager authenticationManager;
+    @Autowired
+    EmployeeRepository employeeRepository;
     @Autowired
     AuthService authService;
 
@@ -43,15 +49,17 @@ public class EmployeeController {
             return ResponseEntity.badRequest().body(Err.error("Error", 400, e.getMessage()));
         }
     }
-    @PostMapping("login")
+    @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody @Valid EmployeeLoginDto employeeLoginDto){
         try {
-            Employee employee  = ((Employee) authService.authenticate(employeeLoginDto.getName(), employeeLoginDto.getPassword()).getPrincipal());
-            String token = tokenService.generateToken(employee.getUsername());
+           Employee employeeLogged =(Employee) authService.authenticate(employeeLoginDto.getEmployeeName(),
+                   employeeLoginDto.getPassword()).getPrincipal();
+            String token = tokenService.generateToken(employeeLogged.getUsername());
             HttpHeaders responseHeaders = new HttpHeaders();
             responseHeaders.set("Authorization", "Bearer" + token);
             return ResponseEntity.ok().headers(responseHeaders).body("Employee authenticated");
         } catch ( Exception e) {
+
             return ResponseEntity.badRequest().body(Err.error("Error", 400, e.getMessage()));
         }
     }

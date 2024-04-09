@@ -1,10 +1,11 @@
 package com.benguela.webAgendaAPI.model;
 
-import com.benguela.webAgendaAPI.util.enums.UserRole;
+import com.benguela.webAgendaAPI.util.enums.RoleEnum;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -19,12 +20,14 @@ public class Employee implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
-    private String name;
+    @NotBlank
+    private String employeeName;
+    @NotBlank
     private String password;
-    private UserRole roles;
+    private RoleEnum role;
 
-    public Employee(String name, String password) {
-        this.name = name;
+    public Employee(String employeeName, String password) {
+        this.employeeName = employeeName;
         this.password = password;
     }
     public Employee(){
@@ -37,12 +40,20 @@ public class Employee implements UserDetails {
 
     @Override
         public Collection<? extends GrantedAuthority> getAuthorities() {
-            if(roles == UserRole.ADMIN){
+            if(role == RoleEnum.ADMIN){
                 return List.of(new SimpleGrantedAuthority("ROLE_ADMIN"),
                         new SimpleGrantedAuthority("ROLE_USER"));
             }
             return List.of(new SimpleGrantedAuthority("ROLE_USER"));
         }
+
+    public RoleEnum getRole() {
+        return role;
+    }
+
+    public void setRole(RoleEnum role) {
+        this.role = role;
+    }
 
     public String getPassword() {
         return password;
@@ -50,7 +61,7 @@ public class Employee implements UserDetails {
 
     @Override
     public String getUsername() {
-        return this.name;
+        return this.employeeName;
     }
 
     @Override
