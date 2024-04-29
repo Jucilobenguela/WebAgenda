@@ -14,6 +14,7 @@ public class ClientDto {
     private String clientName;
     @NotBlank
     private String clientPhoneNumber;
+   // private Service service;
 
     @DateTimeFormat
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm")

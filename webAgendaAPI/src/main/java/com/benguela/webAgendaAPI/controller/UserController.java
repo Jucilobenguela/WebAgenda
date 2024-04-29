@@ -1,19 +1,14 @@
 package com.benguela.webAgendaAPI.controller;
 
-import com.benguela.webAgendaAPI.dto.employeeDto.EmployeeRegisterDto;
 import com.benguela.webAgendaAPI.dto.userDto.UserLoginDto;
 import com.benguela.webAgendaAPI.dto.userDto.UserRegisterDto;
-import com.benguela.webAgendaAPI.exception.ExistentEmployeeException;
 import com.benguela.webAgendaAPI.exception.InvalidEmailException;
 import com.benguela.webAgendaAPI.exception.InvalidPasswordException;
 import com.benguela.webAgendaAPI.exception.NotFindEmailException;
-import com.benguela.webAgendaAPI.model.Employee;
 import com.benguela.webAgendaAPI.model.User;
 import com.benguela.webAgendaAPI.segurity.AuthService;
 import com.benguela.webAgendaAPI.segurity.TokenService;
-import com.benguela.webAgendaAPI.service.interfac.EmployeeI;
 import com.benguela.webAgendaAPI.service.interfac.UserServiceI;
-import com.benguela.webAgendaAPI.util.convert.ConvertEmployee;
 import com.benguela.webAgendaAPI.util.convert.ConvertUser;
 import com.benguela.webAgendaAPI.util.error.Err;
 import jakarta.validation.Valid;
@@ -25,11 +20,9 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
-import java.util.HashMap;
-import java.util.Map;
 
 
-@Controller
+@RestController
 @RequestMapping("/web_agenda/user")
 public class UserController {
 
