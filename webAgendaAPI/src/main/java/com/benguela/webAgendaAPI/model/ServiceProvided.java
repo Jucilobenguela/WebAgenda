@@ -41,4 +41,16 @@ public class ServiceProvided {
     public String getTime() {
         return time;
     }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
+    }
+
+    public void setTime(String time) {
+        this.time = time;
+    }
 }

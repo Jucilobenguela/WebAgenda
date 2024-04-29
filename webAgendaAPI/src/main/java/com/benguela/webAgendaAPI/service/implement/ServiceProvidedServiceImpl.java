@@ -16,7 +16,7 @@ public class ServiceProvidedServiceImpl implements ServiceProvidedServiceI {
     @Autowired
     ServiceProvidedRepository serviceProvidedRepository;
     @Override
-    public ServiceProvided save(ServiceProvided serviceProvided) throws ServiceProvidedException {
+    public ServiceProvided saveServiceProvided(ServiceProvided serviceProvided) throws ServiceProvidedException {
        ServiceProvided serviceProvided1 = serviceProvidedRepository.findByName(serviceProvided.getName());
        if (serviceProvided1!=null){
       throw new ServiceProvidedException("Exist Service Provided");
@@ -25,7 +25,7 @@ public class ServiceProvidedServiceImpl implements ServiceProvidedServiceI {
     }
 
     @Override
-    public List<ServiceProvided> getAll() throws ServiceProvidedException {
+    public List<ServiceProvided> getAllServiceProvided() throws ServiceProvidedException {
         List<ServiceProvided> serviceProvidedList = serviceProvidedRepository.findAll();
         if (serviceProvidedList.isEmpty()){
             throw new ServiceProvidedException("Don´t found Service Provided");
@@ -35,10 +35,35 @@ public class ServiceProvidedServiceImpl implements ServiceProvidedServiceI {
 
     @Override
     public void deleteServiceProvided(Long id) throws ServiceProvidedException {
-        Optional<ServiceProvided> serviceProvidedOptional = serviceProvidedRepository.findById(id);
-        ServiceProvided serviceProvided = serviceProvidedOptional.orElseThrow(() -> new ServiceProvidedException(
-                "Service Provided don´t found"));
+        ServiceProvided serviceProvided = findByIdServiceProvided(id);
         serviceProvidedRepository.delete(serviceProvided);
+    }
 
+    @Override
+    public ServiceProvided updateServiceProvided(ServiceProvided serviceProvided, Long id) throws ServiceProvidedException {
+        ServiceProvided serviceProvidedDB = getServiceProvided(id);
+        if(serviceProvided==null){
+            throw new ServiceProvidedException("Don´t exist data for to update");
+        }
+        if(serviceProvided.getName()!= null){
+            serviceProvidedDB.setName(serviceProvided.getName());
+        }
+        if(serviceProvided.getPrice()>0.0){
+            serviceProvidedDB.setPrice(serviceProvided.getPrice());
+        }
+        if(serviceProvided.getTime()!= null){
+            serviceProvidedDB.setTime(serviceProvided.getTime());
+        }
+        return serviceProvidedRepository.save(serviceProvidedDB);
+    }
+
+    @Override
+    public ServiceProvided getServiceProvided(Long id) throws ServiceProvidedException {
+        return findByIdServiceProvided(id);
+    }
+    private ServiceProvided findByIdServiceProvided(Long id) throws ServiceProvidedException {
+        Optional<ServiceProvided> serviceProvidedOptional = serviceProvidedRepository.findById(id);
+       return serviceProvidedOptional.orElseThrow(() -> new ServiceProvidedException(
+                "Service Provided don´t found"));
     }
 }
