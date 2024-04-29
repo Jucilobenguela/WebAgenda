@@ -9,6 +9,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
+
 @Service
 public class ServiceProvidedServiceImpl implements ServiceProvidedServiceI {
     @Autowired
@@ -23,7 +25,20 @@ public class ServiceProvidedServiceImpl implements ServiceProvidedServiceI {
     }
 
     @Override
-    public List<ServiceProvided> getAll()  {
-        return null;
+    public List<ServiceProvided> getAll() throws ServiceProvidedException {
+        List<ServiceProvided> serviceProvidedList = serviceProvidedRepository.findAll();
+        if (serviceProvidedList.isEmpty()){
+            throw new ServiceProvidedException("Don´t found Service Provided");
+        }
+       return serviceProvidedList;
+    }
+
+    @Override
+    public void deleteServiceProvided(Long id) throws ServiceProvidedException {
+        Optional<ServiceProvided> serviceProvidedOptional = serviceProvidedRepository.findById(id);
+        ServiceProvided serviceProvided = serviceProvidedOptional.orElseThrow(() -> new ServiceProvidedException(
+                "Service Provided don´t found"));
+        serviceProvidedRepository.delete(serviceProvided);
+
     }
 }

@@ -7,6 +7,7 @@ import java.util.List;
 
 public interface ServiceProvidedServiceI {
      ServiceProvided save(ServiceProvided serviceProvided) throws ServiceProvidedException;
-     List<ServiceProvided> getAll();
+     List<ServiceProvided> getAll() throws ServiceProvidedException;
+     void deleteServiceProvided(Long id) throws ServiceProvidedException;
 
 }

@@ -1,6 +1,6 @@
 
 
-FROM mysql:latest
+FROM mysql:8.0.36-oracle
 
 MAINTAINER baeldung.com
 
