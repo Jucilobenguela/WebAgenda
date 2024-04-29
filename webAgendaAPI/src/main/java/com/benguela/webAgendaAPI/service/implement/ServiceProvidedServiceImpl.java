@@ -7,7 +7,6 @@ import com.benguela.webAgendaAPI.service.interfac.ServiceProvidedServiceI;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -42,8 +41,8 @@ public class ServiceProvidedServiceImpl implements ServiceProvidedServiceI {
     @Override
     public ServiceProvided updateServiceProvided(ServiceProvided serviceProvided, Long id) throws ServiceProvidedException {
         ServiceProvided serviceProvidedDB = getServiceProvided(id);
-        if(serviceProvided==null){
-            throw new ServiceProvidedException("Don´t exist data for to update");
+        if(!serviceProvided.allPropertiesInitialized()){
+            throw new ServiceProvidedException("Don´t exist data for to be update");
         }
         if(serviceProvided.getName()!= null){
             serviceProvidedDB.setName(serviceProvided.getName());

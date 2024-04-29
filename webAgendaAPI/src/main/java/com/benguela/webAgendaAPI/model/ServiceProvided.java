@@ -53,4 +53,7 @@ public class ServiceProvided {
     public void setTime(String time) {
         this.time = time;
     }
+    public boolean allPropertiesInitialized() {
+        return name != null && price >0 && time != null;
+    }
 }
